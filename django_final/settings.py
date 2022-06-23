@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -81,18 +82,13 @@ WSGI_APPLICATION = 'django_final.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+
+
 DATABASES = {
-    'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dfdh30587ve8jv',
-        'USER': 'rbozjgmiemqplq',
-        'PASSWORD': '9ffce49782b9942dd924b50d4b8ee7748cee117b324a67dfcc07515bc7d1e4cb',
-        'HOST': 'ec2-23-23-182-238.compute-1.amazonaws.com',
-        'PORT': '5432',
-        'CONN_MAX_AGE': 500
-    }
+    'default': dj_database_url.config(conn_max_age=500) if not DEBUG else {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+    },
 }
 
 AUTH_USER_MODEL = 'app.CustomUser'
