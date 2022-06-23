@@ -23,7 +23,7 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', True)
+DEBUG = bool(os.environ.get('DEBUG', True))
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'django_final.wsgi.application'
 
 
 DATABASES = {
-    'default': get_db_config() if DEBUG else {
+    'default': get_db_config() if not DEBUG else {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }

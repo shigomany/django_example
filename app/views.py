@@ -8,11 +8,11 @@ from app.models import *
 from asgiref.sync import sync_to_async, async_to_sync
 from django.views.decorators.http import require_GET, require_POST
 from django.db.models import Avg, Count, Sum
+import asyncio
 
 @sync_to_async
 def auth(request):
     if request.method == 'POST':
-        # NHJ9921gby-
         form = UserForm(request.POST)
 
         if form.is_valid():
@@ -29,7 +29,7 @@ def auth(request):
     return render(request, 'auth.html', {'form': form})
 
 @sync_to_async
-def logout(request):
+def logout_p(request):
     logout(request)
     return redirect('auth')
 
