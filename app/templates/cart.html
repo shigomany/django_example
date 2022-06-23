@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Cart{% endblock title %}
+
+{% block cart_button %}
+<a href="{% url 'cart-detail' %}">
+    
+    <button class="btn btn-outline-dark" type="submit">
+        <i class="bi-cart-fill me-1"></i>
+        Cart
+        <span class="badge bg-dark text-white ms-1 rounded-pill">
+            {% block cart_count %}{{cart_count}}{% endblock cart_count %}
+        </span>
+    </button>
+</a>
+
+<a href="{% url 'logout' %}">
+    
+    <button class="btn btn-outline-dark mx-3" type="submit">
+        <i class="bi bi-door-open-fill"></i>
+        Logout
+    </button>
+</a>
+{% endblock cart_button %}
+
+{% block content %}
+
+<h3 class="m-3">
+    Cart
+</h3>
+
+<div class="list-group">
+    {% if cart_books %}
+
+        {% for cart_book in cart_books %}
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+            
+            <div class='row'>
+                <div class="col-md-1">
+                    
+                    <img src="{{ cart_book.book.url_image }}" width=150 alt="..."
+                    class="img-thumbnail">
+                </div>
+                <div class="col-10 col-md-10 d-flex align-items-center">
+                    <div>
+                        
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ cart_book.book.title }}</h5>
+                        </div>
+                        <p class="mb-1">{{ cart_book.book.description|truncatechars:150 }}</p>
+                        <small>
+                            <b>Price:</b> 
+                            {% if cart_book.book.sale %}
+                            <span class="text-muted text-decoration-line-through">{{cart_book.book.price}} ₽</span>
+                            {{cart_book.book.price_d}} ₽
+                            {% else %}
+                            {{cart_book.book.price}} ₽
+                            {% endif %}
+                        </small>
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-sm-2 d-flex align-items-center">
+                        <form method="post" action="{% url 'cart-delete' cart_book.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash2-fill"></i> Delete</button>
+                        </form>
+                    </div>
+                </div>
+                
+            </a>
+        {% endfor %}
+        <h4 class='mt-3'>Order price: {{ order_price }} ₽</h4>
+    {% else %}
+        No books in cart
+    {% endif %}
+</div>
+{% endblock content %}

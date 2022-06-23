@@ -10,7 +10,7 @@ class Category(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self) -> str:
-        return f'Publisher(name={self.name})'
+        return f'Category(name={self.name})'
 
 # Издалельство
 class Publisher(models.Model):
@@ -46,7 +46,7 @@ class Book(models.Model):
 
     @property
     def price_d(self):
-        return self.price * (100 - self.sale) / 100
+        return self.price * (100 - (self.sale if self.sale else 0)) / 100
 
 # Кастомный пользователь
 class CustomUser(AbstractUser):
@@ -63,14 +63,16 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return f'CustomUser(email={self.email})'
 
+
 # Корзина
 class Cart(models.Model):
-    items = models.ManyToManyField(Book, related_name='items')
+    books = models.ManyToManyField(Book, through='CartBook')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
-
-
-    
+class CartBook(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    date_created = models.DateField(auto_now_add=True)
 
 
 

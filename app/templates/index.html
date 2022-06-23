@@ -1,5 +1,29 @@
 {% extends 'base.html' %}
 
+{% block title %}Shop{% endblock title %}
+
+{% block cart_button %}
+<a href="{% url 'cart-detail' %}">
+    
+    <button class="btn btn-outline-dark" type="submit">
+        <i class="bi-cart-fill me-1"></i>
+        Cart
+        <span class="badge bg-dark text-white ms-1 rounded-pill">
+            {% block cart_count %}{{cart_count}}{% endblock cart_count %}
+        </span>
+    </button>
+</a>
+
+<a href="{% url 'logout' %}">
+    
+    <button class="btn btn-outline-dark mx-3" type="submit">
+        <i class="bi bi-door-open-fill"></i>
+        Logout
+    </button>
+</a>
+{% endblock cart_button %}
+
+
 {% block body %}
     {% for book in books %}
         <div class="col mb-5">
@@ -17,17 +41,29 @@
                         <h5 class="fw-bolder">{{book.title|truncatechars:50}}</h5>
                         <!-- Product price-->
                         {% if book.sale %}
-                            <span class="text-muted text-decoration-line-through">{{book.price}}₽</span>
-                            {{book.price_d}}₽
+                            <span class="text-muted text-decoration-line-through">{{book.price}} ₽</span>
+                            {{book.price_d}} ₽
                         {% else %}
-                            {{book.price}}₽
+                            {{book.price}} ₽
                         {% endif %}
                     </div>
                 </div>
+                <!-- Category -->
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <b>Author:</b> {{book.author.name}}
+                    </li>
+                    <li class="list-group-item">
+                        <b>Publisher:</b> {{book.publisher.name}}
+                    </li>
+                </ul>
                 <!-- Product actions-->
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                </div>
+                <form method="post" action="{% url 'add_to_cart' book.id %}">
+                    {% csrf_token %}
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent d-flex justify-content-center">
+                        <input type="submit" class="btn btn-outline-dark mt-3" value='Add to cart'/>
+                    </div>
+                </form>
             </div>
         </div>
     {% endfor %}

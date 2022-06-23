@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 django = "*"
 gunicorn = "*"
+django-widget-tweaks = "*"
+whitenoise = "*"
+uvicorn = {extras = ["standard"], version = "*"}
 
 [dev-packages]
 
