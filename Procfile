@@ -1,1 +1,1 @@
-web: daphne django_final.asgi:application
+web: gunicorn django_final.wsgi
