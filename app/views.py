@@ -68,12 +68,9 @@ def cart(request):
         books_count=Count('books')
     ).prefetch_related('books').filter(user__pk__exact=request.user.pk).first()
 
-    if not cart:
-        return Http404()
-
-    cart_books = CartBook.objects.filter(cart=cart.pk).select_related('book').all()
+    cart_books = CartBook.objects.filter(cart=cart.pk).select_related('book').all() if cart else None
     
-    order_sum = sum([el.price_d for el in cart.books.all()])
+    order_sum = sum([el.price_d for el in cart.books.all()]) if cart else None
     return render(request, 'cart.html', context={
         'cart_books': cart_books, 
         'cart_count': cart.books_count if cart else 0,
